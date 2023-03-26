@@ -4,7 +4,32 @@
     <title>Placeholder</title>
   </head>
   <body>
-    <h1>palceholder</h1>
+    <h1>Placeholder</h1>
+    <p>Can you guess the secret number between 1 and 100?</p>
+    <input type="text" id="guess" placeholder="Enter your guess here">
+    <button onclick="checkGuess()">Guess</button>
+    <p id="result"></p>
+    
+    <script>
+      // Generate a random secret number between 1 and 100
+      const secretNumber = Math.floor(Math.random() * 100) + 1;
+
+      function checkGuess() {
+        // Get the player's guess from the input field
+        const guess = parseInt(document.getElementById("guess").value);
+        
+        // Check if the guess is correct, too low, or too high
+        if (guess === secretNumber) {
+          document.getElementById("result").textContent = "Congratulations! You guessed the secret number!";
+        } else if (guess < secretNumber) {
+          document.getElementById("result").textContent = "Too low. Try again.";
+        } else {
+          document.getElementById("result").textContent = "Too high. Try again.";
+        }
+        
+        // Clear the input field
+        document.getElementById("guess").value = "";
+      }
     </script>
   </body>
 </html>
