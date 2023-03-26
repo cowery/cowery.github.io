@@ -2,34 +2,87 @@
 <html>
   <head>
     <title>Placeholder</title>
+    <style>
+      #game {
+        width: 500px;
+        height: 500px;
+        background-color: #000000;
+        position: relative;
+      }
+      #player {
+        width: 50px;
+        height: 50px;
+        background-color: #ff0000;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+      .platform {
+        width: 100px;
+        height: 20px;
+        background-color: #ffffff;
+        position: absolute;
+      }
+    </style>
   </head>
   <body>
-    <h1>Placeholder</h1>
-    <p>Can you guess the secret number between 1 and 100?</p>
-    <input type="text" id="guess" placeholder="Enter your guess here">
-    <button onclick="checkGuess()">Guess</button>
-    <p id="result"></p>
+    <h1>Platformer Game</h1>
+    <div id="game">
+      <div id="player"></div>
+      <div class="platform" style="bottom: 100px; left: 200px;"></div>
+      <div class="platform" style="bottom: 200px; left: 350px;"></div>
+      <div class="platform" style="bottom: 300px; left: 100px;"></div>
+    </div>
     
     <script>
-      // Generate a random secret number between 1 and 100
-      const secretNumber = Math.floor(Math.random() * 100) + 1;
-
-      function checkGuess() {
-        // Get the player's guess from the input field
-        const guess = parseInt(document.getElementById("guess").value);
-        
-        // Check if the guess is correct, too low, or too high
-        if (guess === secretNumber) {
-          document.getElementById("result").textContent = "Congratulations! You guessed the secret number!";
-        } else if (guess < secretNumber) {
-          document.getElementById("result").textContent = "Too low. Try again.";
-        } else {
-          document.getElementById("result").textContent = "Too high. Try again.";
+      const player = document.getElementById("player");
+      let playerX = 0;
+      let playerY = 0;
+      const platforms = document.querySelectorAll(".platform");
+      
+      function update() {
+        // Update player position based on user input
+        if (keys.ArrowLeft) {
+          playerX -= 5;
+        }
+        if (keys.ArrowRight) {
+          playerX += 5;
+        }
+        if (keys.ArrowUp && playerY === 0) {
+          playerY += 15;
         }
         
-        // Clear the input field
-        document.getElementById("guess").value = "";
+        // Apply gravity to player
+        if (playerY > 0) {
+          playerY -= 5;
+        }
+        
+        // Check for collisions between player and platforms
+        for (let i = 0; i < platforms.length; i++) {
+          const platform = platforms[i];
+          if (playerX + 50 > platform.offsetLeft && 
+              playerX < platform.offsetLeft + 100 && 
+              playerY === platform.offsetTop + 20) {
+            playerY += 5;
+          }
+        }
+        
+        // Update player position on screen
+        player.style.left = playerX + "px";
+        player.style.bottom = playerY + "px";
       }
+      
+      // Set up keyboard input handling
+      const keys = {};
+      document.addEventListener("keydown", e => {
+        keys[e.code] = true;
+      });
+      document.addEventListener("keyup", e => {
+        keys[e.code] = false;
+      });
+      
+      // Set up game loop
+      setInterval(update, 1000/60);
     </script>
   </body>
 </html>
