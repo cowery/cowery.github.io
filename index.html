@@ -1,10 +1,22 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Placeholder Page</title>
+    <title>My Website</title>
   </head>
   <body>
-    <h1>Placeholder Page</h1>
-    <p>This is a placeholder page. Content will be added soon.</p>
+    <h1>Welcome to My Website</h1>
+    <p>Explore and have fun!</p>
+    
+    <div id="hidden-message" style="display:none;">
+      <p>You found the hidden message!</p>
+    </div>
+    
+    <script>
+      document.addEventListener('keydown', function(event) {
+        if (event.ctrlKey && event.shiftKey && event.code === 'KeyH') {
+          document.getElementById('hidden-message').style.display = 'block';
+        }
+      });
+    </script>
   </body>
 </html>
