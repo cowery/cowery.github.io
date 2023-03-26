@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Placeholder</title>
+    <title>Platformer Game</title>
     <style>
       #game {
         width: 500px;
@@ -39,7 +39,10 @@
       let playerX = 0;
       let playerY = 0;
       const platforms = document.querySelectorAll(".platform");
-      
+      let isJumping = false;
+      let jumpHeight = 0;
+      const keys = {};
+       
       function update() {
         // Update player position based on user input
         if (keys.ArrowLeft) {
@@ -48,12 +51,13 @@
         if (keys.ArrowRight) {
           playerX += 5;
         }
-        if (keys.ArrowUp && playerY === 0) {
-          playerY += 15;
+        if (keys.ArrowUp && !isJumping) {
+          isJumping = true;
+          jumpHeight = 60;
         }
         
         // Apply gravity to player
-        if (playerY > 0) {
+        if (playerY > 0 || isJumping) {
           playerY -= 5;
         }
         
@@ -63,6 +67,8 @@
           if (playerX + 50 > platform.offsetLeft && 
               playerX < platform.offsetLeft + 100 && 
               playerY === platform.offsetTop + 20) {
+            isJumping = false;
+            jumpHeight = 0;
             playerY += 5;
           }
         }
@@ -70,10 +76,15 @@
         // Update player position on screen
         player.style.left = playerX + "px";
         player.style.bottom = playerY + "px";
+        
+        // Update jump height
+        if (isJumping) {
+          playerY += jumpHeight / 10;
+          jumpHeight -= 6;
+        }
       }
       
       // Set up keyboard input handling
-      const keys = {};
       document.addEventListener("keydown", e => {
         keys[e.code] = true;
       });
