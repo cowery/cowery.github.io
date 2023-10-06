@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Timer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: black;
+      color: white;
+      margin: 0;
+    }
+
+    #timer {
+      font-size: 36px;
+    }
+  </style>
+</head>
+<body>
+  <div id="timer">00:00:00</div>
+
+  <script>
+    var startTime;
+
+    function updateTimer() {
+      var currentTime = Date.now();
+      var elapsedTime = new Date(currentTime - startTime);
+
+      var hours = elapsedTime.getUTCHours().toString().padStart(2, '0');
+      var minutes = elapsedTime.getUTCMinutes().toString().padStart(2, '0');
+      var seconds = elapsedTime.getUTCSeconds().toString().padStart(2, '0');
+
+      document.getElementById('timer').innerHTML = hours + ':' + minutes + ':' + seconds;
+    }
+
+    function startTimer() {
+      // Check if there's a start time in local storage
+      var storedStartTime = localStorage.getItem('startTime');
+      if (storedStartTime) {
+        startTime = parseInt(storedStartTime, 10);
+      } else {
+        startTime = Date.now();
+        localStorage.setItem('startTime', startTime);
+      }
+
+      setInterval(updateTimer, 1000);  // Update every second
+    }
+
+    startTimer();
+
+    // Listen for window focus and blur events
+    window.addEventListener('focus', function() {
+      startTime = Date.now();
+      localStorage.setItem('startTime', startTime);
+      updateTimer();
+    });
+
+    window.addEventListener('blur', function() {
+      // Save the remaining time in local storage
+      localStorage.setItem('startTime', Date.now());
+    });
+  </script>
+</body>
+</html>
